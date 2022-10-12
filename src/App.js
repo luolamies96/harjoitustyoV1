@@ -1,25 +1,49 @@
-import logo from './logo.svg';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const URL = 'https://www.thecocktaildb.com/api/json/v1/1/random.php';
 
+function App() {
+ const [strDrink, SetstrDrink] = useState('')
+ const [strInstructions, SetstrInstructions ] = useState('')
+ const [strGlass, SetstrGlass ] = useState('')
+ const [strDrinkThumb, SetDrinkThump ] = useState('')
+
+
+
+ useEffect(() => {
+  axios.get(URL)
+  .then((response) => {
+    console.log(response.data)
+    SetstrDrink(response.data.drinks[0].strDrink);
+    SetstrInstructions(response.data.drinks[0].strInstructions);
+    SetstrGlass(response.data.drinks[0].strGlass);
+    SetDrinkThump(response.data.drinks[0].strDrinkThumb);
+
+  }). catch(error=>{
+    console.log(error)
+    alert("getting cocktail failed ")
+  })
+
+}, [])
+return (
+  <div>
+    <h3> Cocktail of the day: </h3>
+    <p>{strDrink}</p>
+
+
+    <h3>Instructions:</h3>
+    <p>{strInstructions}</p>
+
+    <h3>glass:</h3>
+    <p>{strGlass}</p>
+
+    <img src={strDrinkThumb} alt=""/>
+
+  </div>
+ 
+
+);
+}
 export default App;
